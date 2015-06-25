@@ -27,10 +27,12 @@ namespace DataTableMapper
                 foreach (var prop in modelProperties)
                 {
                     var fieldName = GetFieldName(prop);
+                    var rowIdentifier = !string.IsNullOrEmpty(fieldName) ? fieldName : prop.Name;
 
-                    if (columns.Contains(fieldName))
+                    if (columns.Contains(fieldName) || columns.Contains(rowIdentifier))
                     {
-                        prop.SetValue(obj, row[fieldName]);
+                        var value = row[rowIdentifier] != DBNull.Value ? row[rowIdentifier] : Convert.ChangeType(null, prop.PropertyType);
+                        prop.SetValue(obj, value);
                     }
                 }
 
@@ -41,7 +43,7 @@ namespace DataTableMapper
         private static string GetFieldName(PropertyInfo prop)
         {
             var attribute = prop.GetCustomAttribute<Map>();
-            return attribute != null ? ((Map)attribute).Field : string.Empty;
+            return attribute != null ? ((Map)attribute).Field : (string)null;
         }
 
         private static IEnumerable<string> GetDataTableColumns(DataTable table)

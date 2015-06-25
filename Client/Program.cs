@@ -48,8 +48,8 @@ namespace Client
 
     public class Model
     {
-        [Map("Column1")]
-        public string Prop1 { get; set; }
+        //[Map("Column1")]
+        public string Column1 { get; set; }
         [Map("Column2")]
         public int Prop2 { get; set; }
         [Map("Column3")]
